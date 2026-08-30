@@ -34,6 +34,7 @@ contract DreamDEXRouter {
     address public immutable owner;
     uint256 private _locked;
     uint256 public marketCount;
+    uint256 public totalProtocolFees;
 
     mapping(bytes32 => EventMarket) public markets;
     mapping(bytes32 => mapping(address => UserPosition)) public positions;
@@ -107,6 +108,7 @@ contract DreamDEXRouter {
 
         uint256 fee = (msg.value * PROTOCOL_FEE_BPS) / MAX_BPS;
         uint256 netAmount = msg.value - fee;
+        totalProtocolFees += fee;
 
         if (isLong) {
             market.totalLongPool += netAmount;
@@ -177,13 +179,14 @@ contract DreamDEXRouter {
 
     /**
      * @notice Withdraw accumulated protocol fees to the owner.
-     * Fees = contract balance - sum of all unresolved market pools.
+     * Only withdraws collected protocol fee revenue, preserving active user collateral.
      */
     function withdrawFees() external onlyOwner nonReentrant {
-        uint256 contractBalance = address(this).balance;
-        require(contractBalance > 0, "NO_BALANCE");
+        uint256 amountToWithdraw = totalProtocolFees;
+        require(amountToWithdraw > 0, "NO_FEES_TO_WITHDRAW");
+        totalProtocolFees = 0;
 
-        (bool success, ) = owner.call{value: contractBalance}("");
+        (bool success, ) = owner.call{value: amountToWithdraw}("");
         require(success, "FEE_WITHDRAWAL_FAILED");
     }
 
