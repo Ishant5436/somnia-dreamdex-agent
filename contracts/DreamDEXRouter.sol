@@ -174,4 +174,21 @@ contract DreamDEXRouter {
         emit PayoutClaimed(marketId, msg.sender, payout);
         return payout;
     }
+
+    /**
+     * @notice Withdraw accumulated protocol fees to the owner.
+     * Fees = contract balance - sum of all unresolved market pools.
+     */
+    function withdrawFees() external onlyOwner nonReentrant {
+        uint256 contractBalance = address(this).balance;
+        require(contractBalance > 0, "NO_BALANCE");
+
+        (bool success, ) = owner.call{value: contractBalance}("");
+        require(success, "FEE_WITHDRAWAL_FAILED");
+    }
+
+    /**
+     * @notice Accept direct ETH transfers (e.g. from selfdestruct).
+     */
+    receive() external payable {}
 }
