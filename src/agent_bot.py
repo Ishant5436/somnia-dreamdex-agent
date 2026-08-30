@@ -22,6 +22,8 @@ class DreamDEXAgent:
         """
         Evaluates whether an event contract is underpriced based on realized volatility signals.
         """
+        assert not math.isnan(current_vol_bps), "Volatility cannot be NaN"
+        assert not math.isnan(trend_signal), "Trend signal cannot be NaN"
         assert current_vol_bps >= 0.0, "Volatility cannot be negative"
         assert -1.0 <= trend_signal <= 1.0, "Signal must be bounded [-1.0, 1.0]"
 
@@ -56,6 +58,7 @@ class DreamDEXAgent:
         return result
 
     def simulate_order_execution(self, market_id: str, side: str, amount_eth: float) -> dict:
+        assert side in ("LONG", "SHORT", "YES", "NO"), f"Invalid side: {side}"
         assert amount_eth >= 0.001, "Min order size 0.001 ETH"
         self.trade_count += 1
         tx_hash = "0x" + hashlib.sha256(f"{market_id}{side}{amount_eth}{time.time()}".encode()).hexdigest()
