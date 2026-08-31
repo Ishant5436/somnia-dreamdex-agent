@@ -7,6 +7,8 @@ An ultra-high-throughput, non-custodial AI Agent and smart contract routing prot
 [![Solidity](https://img.shields.io/badge/Solidity-0.8.20-orange)](contracts/DreamDEXRouter.sol)
 [![Safety](https://img.shields.io/badge/Safety%20Standard-Deterministic%20Invariants-purple)](contracts/DreamDEXRouter.sol)
 
+![Somnia DreamDEX Agent Demo](assets/somnia_agent_demo.gif)
+
 ---
 
 ## 1. Problem & Core Innovation
