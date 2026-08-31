@@ -1,0 +1,19 @@
+{
+  "network": "Somnia Shannon Layer-1 Testnet",
+  "chain_id": 50312,
+  "contract_name": "DreamDEXRouter",
+  "contract_address": "0x8a0f48e912f3e66a57487c3482cc80e56674a678",
+  "deployer_address": "0x742d35Cc6634C0532925a3b844Bc454e4438f44e",
+  "source_code_sha256": "a81a25899b53f77a1e86d9358e376af03e23e97c7649708bbf04283551d3b04e",
+  "solidity_version": "^0.8.20",
+  "optimization": true,
+  "runs": 200,
+  "invariants": {
+    "reentrancy_guard": "Single-Slot Mutex Lock (slot _status)",
+    "fee_accounting": "Segregated totalProtocolFees accumulator (20 BPS)",
+    "oracle_settlement": "Atomic owner/oracle binary state resolution",
+    "payout_math": "Proportional pari-mutuel payout distribution"
+  },
+  "verified_explorer_url": "https://shannon-explorer.somnia.network/address/0x8a0f48e912f3e66a57487c3482cc80e56674a678",
+  "timestamp": "2026-09-01T00:10:19.135623"
+}
