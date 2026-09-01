@@ -75,6 +75,6 @@ class DreamDEXAgent:
 
 if __name__ == "__main__":
     agent = DreamDEXAgent()
-    print("🤖 Somnia × DreamDEX Agent Initialized.")
+    print("[AGENT]  Somnia × DreamDEX Agent Initialized.")
     decision = agent.evaluate_event_contract("Will BTC stay above $78,000 by 18:00 UTC?", current_vol_bps=32.5, trend_signal=0.65)
     print("Decision Output:", json.dumps(decision, indent=2))

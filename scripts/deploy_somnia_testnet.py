@@ -53,10 +53,10 @@ def main():
     with open(receipt_path, "w") as f:
         json.dump(receipt, f, indent=2)
 
-    print(f"✔ Contract Verified: {receipt['contract_name']}")
-    print(f"✔ Contract Address:  {receipt['contract_address']}")
-    print(f"✔ Explorer URL:      {receipt['verified_explorer_url']}")
-    print(f"✔ Deployment receipt saved to: {receipt_path}\n")
+    print(f"[SUCCESS]  Contract Verified: {receipt['contract_name']}")
+    print(f"[SUCCESS]  Contract Address:  {receipt['contract_address']}")
+    print(f"[SUCCESS]  Explorer URL:      {receipt['verified_explorer_url']}")
+    print(f"[SUCCESS]  Deployment receipt saved to: {receipt_path}\n")
 
 if __name__ == "__main__":
     main()

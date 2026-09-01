@@ -82,7 +82,7 @@ def main():
     print(f"  • Final Realized PnL: {GREEN}+$22.00 USD (Clean Settlement){RESET}")
 
     print(f"\n{BOLD}{GREEN}======================================================================{RESET}")
-    print(f"{BOLD}{GREEN}✅ SOMNIA × DREAMDEX AUTONOMOUS AGENT DEMO COMPLETE — 100% SUCCESSFUL{RESET}")
+    print(f"{BOLD}{GREEN}[SUCCESS]  SOMNIA × DREAMDEX AUTONOMOUS AGENT DEMO COMPLETE — 100% SUCCESSFUL{RESET}")
     print(f"{BOLD}{GREEN}======================================================================{RESET}\n")
 
 
