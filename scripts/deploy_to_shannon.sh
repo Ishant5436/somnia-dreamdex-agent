@@ -14,7 +14,7 @@ if [ ! -f "$ENV_FILE" ]; then
 fi
 
 DEPLOYER_ADDRESS=$(grep "Address:" "$ENV_FILE" | awk '{print $2}')
-PRIVATE_KEY=$(grep "Private Key:" "$ENV_FILE" | awk '{print $2}')
+PRIVATE_KEY=$(grep -i "Private key:" "$ENV_FILE" | awk '{print $3}')
 
 echo "=============================================================================="
 echo "          SOMNIA SHANNON TESTNET ON-CHAIN CONTRACT DEPLOYMENT ENGINE          "
