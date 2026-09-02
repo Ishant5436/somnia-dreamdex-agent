@@ -5,6 +5,9 @@
 **Track:** Prediction Markets & Automated Event Contracts  
 **GitHub Repository:** [https://github.com/Ishant5436/somnia-dreamdex-agent](https://github.com/Ishant5436/somnia-dreamdex-agent)  
 **Smart Contract:** [`contracts/DreamDEXRouter.sol`](https://github.com/Ishant5436/somnia-dreamdex-agent/blob/main/contracts/DreamDEXRouter.sol)  
+**Verified On-Chain Contract:** [`0x589fE98EDB63F3e158DdE791C5144369fAeC4cE5`](https://shannon-explorer.somnia.network/address/0x589fE98EDB63F3e158DdE791C5144369fAeC4cE5)  
+**Creation Tx Hash:** [`0x9118d3d848973c70cea5173a4433b355bef7a1966a0582bee7898968628e357d`](https://shannon-explorer.somnia.network/tx/0x9118d3d848973c70cea5173a4433b355bef7a1966a0582bee7898968628e357d)  
+**Deployer Address:** `0x31305a21497df91A9D8a60a2FF62519973Ab8323` (Somnia Shannon Testnet — Chain ID 50312)  
 
 ---
 

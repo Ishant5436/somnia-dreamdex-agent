@@ -5,11 +5,13 @@ An ultra-high-throughput, non-custodial AI Agent and smart contract routing prot
 [![Tests](https://img.shields.io/badge/Tests-16%2F16%20Passed-brightgreen)](tests/)
 [![CI](https://github.com/Ishant5436/somnia-dreamdex-agent/actions/workflows/ci.yml/badge.svg)](https://github.com/Ishant5436/somnia-dreamdex-agent/actions)
 [![Network](https://img.shields.io/badge/Network-Somnia%20Shannon%20(50312)-blue)](https://somnia.network)
-[![Contract](https://img.shields.io/badge/Contract-0x8a0f...a678-green)](https://shannon-explorer.somnia.network/address/0x8a0f48e912f3e66a57487c3482cc80e56674a678)
+[![Contract](https://img.shields.io/badge/Contract-0x589f...c4cE5-green)](https://shannon-explorer.somnia.network/address/0x589fE98EDB63F3e158DdE791C5144369fAeC4cE5)
 [![Solidity](https://img.shields.io/badge/Solidity-0.8.20-orange)](contracts/DreamDEXRouter.sol)
 [![Safety](https://img.shields.io/badge/Safety%20Standard-Deterministic%20Invariants-purple)](contracts/DreamDEXRouter.sol)
 
-> **Verified Somnia Shannon Testnet Contract:** [`0x8a0f48e912f3e66a57487c3482cc80e56674a678`](https://shannon-explorer.somnia.network/address/0x8a0f48e912f3e66a57487c3482cc80e56674a678)  
+> **Competition Track:** Event Contracts Hackathon (Somnia Network & DreamDEX) — $5,000 Prize Pool  
+> **Verified Somnia Shannon Testnet Contract:** [`0x589fE98EDB63F3e158DdE791C5144369fAeC4cE5`](https://shannon-explorer.somnia.network/address/0x589fE98EDB63F3e158DdE791C5144369fAeC4cE5)  
+> **On-Chain Creation Tx:** [`0x9118d3d848973c70cea5173a4433b355bef7a1966a0582bee7898968628e357d`](https://shannon-explorer.somnia.network/tx/0x9118d3d848973c70cea5173a4433b355bef7a1966a0582bee7898968628e357d)  
 > **1-Second Instant Demo:** `make demo`
 
 ![Somnia DreamDEX Agent Demo](assets/somnia_agent_demo.gif)
