@@ -1,9 +1,12 @@
-.PHONY: all test demo deploy lint clean
+.PHONY: all test demo deploy telemetry lint clean
 
 all: test
 
 test:
 	python3 -m pytest -v
+
+telemetry:
+	python3 scripts/watch_testnet_events.py
 
 demo:
 	python3 scripts/record_demo_walkthrough.py
