@@ -2,7 +2,7 @@
 
 An ultra-high-throughput, non-custodial AI Agent and smart contract routing protocol engineered natively for **Somnia Layer-1** (Shannon Testnet) and **DreamDEX Event Contracts**.
 
-[![Tests](https://img.shields.io/badge/Tests-15%2F15%20Passed-brightgreen)](tests/)
+[![Tests](https://img.shields.io/badge/Tests-16%2F16%20Passed-brightgreen)](tests/)
 [![CI](https://github.com/Ishant5436/somnia-dreamdex-agent/actions/workflows/ci.yml/badge.svg)](https://github.com/Ishant5436/somnia-dreamdex-agent/actions)
 [![Network](https://img.shields.io/badge/Network-Somnia%20Shannon%20(50312)-blue)](https://somnia.network)
 [![Contract](https://img.shields.io/badge/Contract-0x8a0f...a678-green)](https://shannon-explorer.somnia.network/address/0x8a0f48e912f3e66a57487c3482cc80e56674a678)
