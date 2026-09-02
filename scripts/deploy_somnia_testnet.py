@@ -21,8 +21,9 @@ def main():
     print(f"• Target Explorer: {EXPLORER_URL}")
     print("• Contract: contracts/DreamDEXRouter.sol (Solidity ^0.8.20)\n")
 
-    # Compute deterministic contract bytecode hash and simulated address
-    with open("/Users/ishantpanchal/somnia-dreamdex-agent/contracts/DreamDEXRouter.sol", "r") as f:
+    BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    contract_path = os.path.join(BASE_DIR, "contracts", "DreamDEXRouter.sol")
+    with open(contract_path, "r") as f:
         contract_src = f.read()
 
     src_hash = hashlib.sha256(contract_src.encode("utf-8")).hexdigest()
@@ -49,7 +50,7 @@ def main():
         "timestamp": datetime.datetime.now().isoformat()
     }
 
-    receipt_path = "/Users/ishantpanchal/somnia-dreamdex-agent/contracts/deployment_receipt.json"
+    receipt_path = os.path.join(BASE_DIR, "contracts", "deployment_receipt.json")
     with open(receipt_path, "w") as f:
         json.dump(receipt, f, indent=2)
 
