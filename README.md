@@ -2,7 +2,7 @@
 
 An ultra-high-throughput, non-custodial AI Agent and smart contract routing protocol engineered natively for **Somnia Layer-1** (Shannon Testnet) and **DreamDEX Event Contracts**.
 
-[![Tests](https://img.shields.io/badge/Tests-11%2F11%20Passed-brightgreen)](tests/)
+[![Tests](https://img.shields.io/badge/Tests-15%2F15%20Passed-brightgreen)](tests/)
 [![CI](https://github.com/Ishant5436/somnia-dreamdex-agent/actions/workflows/ci.yml/badge.svg)](https://github.com/Ishant5436/somnia-dreamdex-agent/actions)
 [![Network](https://img.shields.io/badge/Network-Somnia%20Shannon%20(50312)-blue)](https://somnia.network)
 [![Contract](https://img.shields.io/badge/Contract-0x8a0f...a678-green)](https://shannon-explorer.somnia.network/address/0x8a0f48e912f3e66a57487c3482cc80e56674a678)
@@ -28,24 +28,16 @@ Prediction markets and binary event contracts on high-speed Layer-1 networks fac
 * **Chop Filter:** When volatility is below 15 bps, execution is 100% gated (zero capital risked).
 * **Breakout Deployment:** When volatility expands with triple-timeframe momentum alignment ($|\text{trend}| > 0.30$), the agent deploys directional liquidity into DreamDEX binary event contracts.
 
-```
-                    Real-Time Somnia L1 Tick Stream
-                                  │
-                                  ▼
-                   Parkinson Volatility Evaluator
-                    ├── (Realized Vol < 15 bps)  ──► PASS (Chop Gated / $0 Risk)
-                    └── (Vol Expansion > 15 bps) ──► Momentum Directional Scoring
-                                                               │
-                                                               ▼
-                                                  DreamDEXRouter.sol (Somnia L1)
-                                                  ├── Atomic Pari-Mutuel Shares
-                                                  ├── Mutex Reentrancy Guard
-                                                  └── Oracle Settlement & Payout
-```
-
 ---
 
-## 2. Mathematical & Architectural Specification
+## 2. Data Structures & Algorithmic Complexity
+
+| Component | Primitive | Time Complexity | Space Complexity | Theoretical Invariant |
+| :--- | :--- | :---: | :---: | :--- |
+| **Parkinson Volatility** | High-Low Log-Spread Kernel | $\mathcal{O}(1)$ rolling step | $\mathcal{O}(W)$ deque | $\sigma^2 = \frac{1}{4 \ln 2 \cdot N} \sum \ln(H_i / L_i)^2$; 5x variance efficiency over close-to-close returns. |
+| **Extrema Deque** | `SlidingMonotonicExtremum` | $\mathcal{O}(1)$ amortized | $\mathcal{O}(W)$ index queue | Monotonic index-tagged deque; evicts non-extrema in-place; zero heap allocations. |
+| **Pari-Mutuel Router** | `DreamDEXRouter.sol` | $\mathcal{O}(1)$ execution | $\mathcal{O}(1)$ slot storage | Single-slot reentrancy mutex (`_status == 1 -> 2 -> 1`); checks-effects-interactions payout distribution. |
+| **Chop Filter Gate** | Threshold Deadband | $\mathcal{O}(1)$ check | $\mathcal{O}(1)$ scalar | Bounded signal deadband $[-0.30, +0.30]$; strict confidence score floor and ceiling ($[0.0, 0.95]$). |
 
 ### Realized Volatility Formulation
 Realized volatility is computed over rolling tick windows:
