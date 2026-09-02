@@ -6,6 +6,11 @@ __pycache__/
 .env
 .env*
 *.key
-*.secret
 .deployer*
 keystore.json
+
+# Foundry build artifacts
+out/
+cache/
+
+
