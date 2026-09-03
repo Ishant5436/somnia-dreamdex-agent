@@ -2,16 +2,16 @@
 
 An ultra-high-throughput, non-custodial AI Agent and smart contract routing protocol engineered natively for **Somnia Layer-1** (Shannon Testnet) and **DreamDEX Event Contracts**.
 
-[![Tests](https://img.shields.io/badge/Tests-16%2F16%20Passed-brightgreen)](tests/)
+[![Tests](https://img.shields.io/badge/Tests-17%2F17%20Passed-brightgreen)](tests/)
 [![CI](https://github.com/Ishant5436/somnia-dreamdex-agent/actions/workflows/ci.yml/badge.svg)](https://github.com/Ishant5436/somnia-dreamdex-agent/actions)
 [![Network](https://img.shields.io/badge/Network-Somnia%20Shannon%20(50312)-blue)](https://somnia.network)
-[![Contract](https://img.shields.io/badge/Contract-0x589f...c4cE5-green)](https://shannon-explorer.somnia.network/address/0x589fE98EDB63F3e158DdE791C5144369fAeC4cE5)
+[![Contract](https://img.shields.io/badge/Contract-0xc021...F36D-green)](https://shannon-explorer.somnia.network/address/0xc0219209598d4d3A86ff0CcCcC531d623b51F36D)
 [![Solidity](https://img.shields.io/badge/Solidity-0.8.20-orange)](contracts/DreamDEXRouter.sol)
 [![Safety](https://img.shields.io/badge/Safety%20Standard-Deterministic%20Invariants-purple)](contracts/DreamDEXRouter.sol)
 
 > **Competition Track:** Event Contracts Hackathon (Somnia Network & DreamDEX) — $5,000 Prize Pool  
-> **Verified Somnia Shannon Testnet Contract:** [`0x589fE98EDB63F3e158DdE791C5144369fAeC4cE5`](https://shannon-explorer.somnia.network/address/0x589fE98EDB63F3e158DdE791C5144369fAeC4cE5)  
-> **On-Chain Creation Tx:** [`0x9118d3d848973c70cea5173a4433b355bef7a1966a0582bee7898968628e357d`](https://shannon-explorer.somnia.network/tx/0x9118d3d848973c70cea5173a4433b355bef7a1966a0582bee7898968628e357d)  
+> **Verified Somnia Shannon Testnet Contract:** [`0xc0219209598d4d3A86ff0CcCcC531d623b51F36D`](https://shannon-explorer.somnia.network/address/0xc0219209598d4d3A86ff0CcCcC531d623b51F36D)  
+> **On-Chain Creation Tx:** [`0x79df1813e2ce54afa4c014ac4c7e2cc358a89a0a789c5adb4b1700593182e657`](https://shannon-explorer.somnia.network/tx/0x79df1813e2ce54afa4c014ac4c7e2cc358a89a0a789c5adb4b1700593182e657)  
 > **1-Second Instant Demo:** `make demo`
 
 ![Somnia DreamDEX Agent Demo](assets/somnia_agent_demo.gif)

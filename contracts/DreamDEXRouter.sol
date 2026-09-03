@@ -11,6 +11,7 @@ contract DreamDEXRouter {
     uint256 public constant PROTOCOL_FEE_BPS = 20; // 0.20% fee
     uint256 public constant MAX_BPS = 10000;
     uint256 public constant MAX_EXPIRY_HORIZON = 30 days;
+    uint256 public constant EMERGENCY_TIMEOUT_GRACE_PERIOD = 3 days;
 
     // --- Structs ---
     struct EventMarket {
@@ -137,6 +138,24 @@ contract DreamDEXRouter {
         market.winningOutcome = outcome;
 
         emit MarketResolved(marketId, outcome, block.timestamp);
+    }
+
+    /**
+     * @notice Permissionless emergency cancellation if market remains unresolved past expiry + grace period.
+     * Guarantees liveness: anyone can cancel an abandoned market to refund original principal to participants.
+     */
+    function emergencyResolveExpiredMarket(
+        bytes32 marketId
+    ) external nonReentrant {
+        EventMarket storage market = markets[marketId];
+        require(market.creator != address(0), "MARKET_NOT_FOUND");
+        require(!market.isResolved, "ALREADY_RESOLVED");
+        require(block.timestamp >= market.expiryTimestamp + EMERGENCY_TIMEOUT_GRACE_PERIOD, "GRACE_PERIOD_NOT_ELAPSED");
+
+        market.isResolved = true;
+        market.winningOutcome = 3; // CANCELLED: Enables 100% refund of principal in claimPayout
+
+        emit MarketResolved(marketId, 3, block.timestamp);
     }
 
     /**

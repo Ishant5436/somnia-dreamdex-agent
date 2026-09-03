@@ -2,20 +2,20 @@
   "network": "Somnia Shannon Layer-1 Testnet",
   "chain_id": 50312,
   "contract_name": "DreamDEXRouter",
-  "contract_address": "0x589fE98EDB63F3e158DdE791C5144369fAeC4cE5",
+  "contract_address": "0xc0219209598d4d3A86ff0CcCcC531d623b51F36D",
   "deployer_address": "0x31305a21497df91A9D8a60a2FF62519973Ab8323",
-  "transaction_hash": "0x9118d3d848973c70cea5173a4433b355bef7a1966a0582bee7898968628e357d",
-  "block_number": 478112639,
+  "transaction_hash": "0x79df1813e2ce54afa4c014ac4c7e2cc358a89a0a789c5adb4b1700593182e657",
   "solidity_version": "^0.8.20",
   "optimization": true,
   "runs": 200,
   "invariants": {
-    "reentrancy_guard": "Single-Slot Mutex Lock (slot _status)",
+    "reentrancy_guard": "Single-Slot Mutex Lock (slot _locked)",
     "fee_accounting": "Segregated totalProtocolFees accumulator (20 BPS)",
     "oracle_settlement": "Atomic owner/oracle binary state resolution",
+    "permissionless_liveness": "emergencyResolveExpiredMarket() timeout fallback (3-day grace period)",
     "payout_math": "Proportional pari-mutuel payout distribution"
   },
-  "verified_explorer_url": "https://shannon-explorer.somnia.network/address/0x589fE98EDB63F3e158DdE791C5144369fAeC4cE5",
-  "transaction_explorer_url": "https://shannon-explorer.somnia.network/tx/0x9118d3d848973c70cea5173a4433b355bef7a1966a0582bee7898968628e357d",
-  "timestamp": "2026-09-02T21:25:46Z"
+  "verified_explorer_url": "https://shannon-explorer.somnia.network/address/0xc0219209598d4d3A86ff0CcCcC531d623b51F36D",
+  "transaction_explorer_url": "https://shannon-explorer.somnia.network/tx/0x79df1813e2ce54afa4c014ac4c7e2cc358a89a0a789c5adb4b1700593182e657",
+  "timestamp": "2026-09-04T02:27:56Z"
 }

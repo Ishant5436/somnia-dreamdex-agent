@@ -278,3 +278,67 @@ def test_whitebox_reentrancy_attack_blocked_by_guard(anvil_chain):
         r = w3.eth.wait_for_transaction_receipt(tx_hash)
         assert r.status == 1  # force failure path if it didn't revert outright
         raise AssertionError("ALREADY_CLAIMED market was claimed a second time")
+
+
+def test_whitebox_emergency_resolve_expired_market_liveness(anvil_chain):
+    """
+    White-box test for permissionless liveness fallback:
+    Proves that if the owner/oracle goes offline, any non-owner participant
+    can trigger emergency cancellation past the 3-day grace period, unlocking
+    100% principal refunds.
+    """
+    w3 = anvil_chain
+    owner, user_a, non_owner = w3.eth.accounts[0], w3.eth.accounts[1], w3.eth.accounts[2]
+
+    # Deploy fresh DreamDEXRouter
+    contracts = _compile_contracts()
+    router = _deploy(w3, contracts, f"{ROUTER_SRC}:DreamDEXRouter", owner)
+
+    # 1. Create a 120-second binary market
+    duration = 120
+    tx_hash = router.functions.createMarket("BTC Breaks $100k", duration).transact({"from": owner})
+    receipt = w3.eth.wait_for_transaction_receipt(tx_hash)
+    market_created_logs = router.events.MarketCreated().process_receipt(receipt)
+    market_id = market_created_logs[0]["args"]["marketId"]
+
+    # 2. User A deposits 1 ETH into LONG
+    deposit_wei = w3.to_wei(1, "ether")
+    tx_hash = router.functions.buyOutcomeShares(market_id, True).transact({
+        "from": user_a,
+        "value": deposit_wei
+    })
+    assert w3.eth.wait_for_transaction_receipt(tx_hash).status == 1
+
+    # 3. Non-owner attempts emergency resolve immediately -> must revert (grace period not elapsed)
+    with pytest.raises(Exception):
+        router.functions.emergencyResolveExpiredMarket(market_id).transact({"from": non_owner})
+
+    # 4. Warp time past expiry + 3 days (duration + 3*86400 + 10 seconds)
+    warp_seconds = duration + (3 * 86400) + 10
+    w3.provider.make_request("evm_increaseTime", [warp_seconds])
+    w3.provider.make_request("evm_mine", [])
+
+    # 5. Non-owner calls emergencyResolveExpiredMarket permissionlessly!
+    tx_hash = router.functions.emergencyResolveExpiredMarket(market_id).transact({"from": non_owner})
+    rec = w3.eth.wait_for_transaction_receipt(tx_hash)
+    assert rec.status == 1, "Permissionless emergency resolution failed"
+
+    # Sanity: verify market state
+    market_data = router.functions.markets(market_id).call()
+    assert market_data[6] is True  # isResolved == true
+    assert market_data[7] == 3     # winningOutcome == 3 (CANCELLED / REFUND)
+
+    # 6. User A calls claimPayout and reclaims principal (minus initial 0.20% fee)
+    bal_before = w3.eth.get_balance(user_a)
+    tx_hash = router.functions.claimPayout(market_id).transact({"from": user_a})
+    receipt = w3.eth.wait_for_transaction_receipt(tx_hash)
+    assert receipt.status == 1
+
+    bal_after = w3.eth.get_balance(user_a)
+    gas_used = receipt.gasUsed * receipt.effectiveGasPrice
+    net_refund = bal_after - bal_before + gas_used
+
+    # Net shares deposited: 1 ETH - 20 BPS = 0.998 ETH
+    expected_refund = deposit_wei - ((deposit_wei * 20) // 10000)
+    assert net_refund == expected_refund, f"Expected {expected_refund}, got {net_refund}"
+
