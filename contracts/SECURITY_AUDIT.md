@@ -84,7 +84,7 @@ The docstring explicitly anticipates ETH arriving this way ("e.g. from selfdestr
 
 ## Power of 10 Safety Matrix (adapted for Solidity)
 
-The original NASA/JPL rules target C; this maps them to the closest meaningful EVM/Solidity equivalent rather than restating them verbatim, and is graded honestly against what was actually verified above — not a blanket pass.
+Gerard J. Holzmann's original Power of 10 rules target C; this maps them to the closest meaningful EVM/Solidity equivalent rather than restating them verbatim, and is graded honestly against what was actually verified above — not a blanket pass.
 
 | # | Rule (adapted) | Status | Basis |
 |---|---|---|---|
