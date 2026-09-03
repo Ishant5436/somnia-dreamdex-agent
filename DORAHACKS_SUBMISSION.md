@@ -19,19 +19,23 @@ Traditional prediction market bots bleed capital during consolidation chop due t
 
 ---
 
-## 2. Key Architecture & Deliverables
+## 2. **Key Architecture & Deliverables**
 
 1. **Non-Reentrant Event Router ([`DreamDEXRouter.sol`](contracts/DreamDEXRouter.sol)):**
    * Single-slot mutex locks preventing cross-contract and same-contract reentrancy.
    * Atomic outcome minting (`YES` / `NO` shares), oracle settlement, and proportional payout distribution.
-   * Adheres strictly to Gerard J. Holzmann's Deterministic Safety Invariants (bounded loops, checked arithmetic).
+   * Adheres strictly to Deterministic Safety Invariants (Power of 10 Rules: bounded loops, checked arithmetic).
 
 2. **Autonomous Volatility Agent ([`src/agent_bot.py`](src/agent_bot.py)):**
    * Real-time tick ingestion and rolling realized volatility calculation.
    * Volatility chop filter gating orders below threshold.
    * Directional confidence scoring for binary prediction markets.
 
-3. **Interactive Demo Walkthrough ([`scripts/record_demo_walkthrough.py`](scripts/record_demo_walkthrough.py)):**
+3. **Decentralization & Resolution Roadmap:**
+   * **Phase 1 (Current Shannon Testnet Deployment `0x589f...c4cE5`):** Outcome settlement is gated by the verified market operator oracle key (`onlyOwner`) to safeguard testnet execution against malicious resolution griefing.
+   * **Phase 2 (Mainnet Roadmap):** Permissionless optimistic oracle feeds with bonded outcome proposals and a 24-hour challenge dispute window prior to payout unlocking.
+
+4. **Interactive Demo Walkthrough ([`scripts/record_demo_walkthrough.py`](scripts/record_demo_walkthrough.py)):**
    * Full end-to-end simulation from tick ingestion to onchain transaction confirmation and oracle payout disbursement.
 
 ---
