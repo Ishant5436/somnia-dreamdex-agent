@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Somnia Shannon Testnet Live Settlement & Event Telemetry Daemon
-Monitors DreamDEXRouter (0x8a0f48e912f3e66a57487c3482cc80e56674a678)
+Monitors DreamDEXRouter (0xc0219209598d4d3A86ff0CcCcC531d623b51F36D)
 on Somnia Shannon Layer-1 Testnet (Chain ID 50312).
 """
 
@@ -17,7 +17,7 @@ from src.agent_bot import DreamDEXAgent
 from src.indicators import ParkinsonVolatility, SlidingMonotonicExtremum
 
 RPC_URL = "https://dream-rpc.somnia.network"
-CONTRACT_ADDRESS = "0x8a0f48e912f3e66a57487c3482cc80e56674a678"
+CONTRACT_ADDRESS = "0xc0219209598d4d3A86ff0CcCcC531d623b51F36D"
 CHAIN_ID = 50312
 
 

@@ -13,9 +13,11 @@
 
 ## 1. Executive Summary
 
-**Somnia-DreamDEX-Agent** is a high-frequency autonomous prediction market agent and EVM event router built natively for the **Somnia Shannon Layer-1 Testnet**. 
+**Somnia-DreamDEX-Agent** is an ultra-high-throughput autonomous prediction market agent and EVM event settlement router engineered natively for the **Somnia Shannon Layer-1 Testnet**.
 
-Traditional prediction market bots bleed capital during consolidation chop due to spread slippage and execution fees. Our agent employs a **Parkinson Realized Volatility Gate** that locks execution during low-volatility chop (<15 bps) and deploys directional liquidity into DreamDEX binary event contracts only during regime expansion.
+Built to solve the dual failure modes of high-frequency prediction markets — capital bleed in chop and abandoned market freezes — our protocol delivers two core innovations:
+1. **Parkinson Realized Volatility Gating:** Locks agent execution during consolidation chop (<15 bps) to eliminate spread slippage, deploying capital into DreamDEX binary event contracts only upon regime expansion.
+2. **Permissionless Liveness Fallback (`emergencyResolveExpiredMarket`):** A trustless on-chain escape hatch that allows ANY participant to cancel an abandoned market and claim a 100% net deposit refund if the market creator or oracle fails to resolve within a 3-day grace period.
 
 ---
 
@@ -24,7 +26,7 @@ Traditional prediction market bots bleed capital during consolidation chop due t
 1. **Non-Reentrant Event Router ([`DreamDEXRouter.sol`](contracts/DreamDEXRouter.sol)):**
    * Single-slot mutex locks preventing cross-contract and same-contract reentrancy.
    * Atomic outcome minting (`YES` / `NO` shares), oracle settlement, and proportional payout distribution.
-   * **Permissionless Liveness Guarantee (`emergencyResolveExpiredMarket`):** If the market owner or oracle ever goes offline or fails to resolve an expired market, ANY participant can permissionlessly trigger emergency market cancellation after a 3-day grace period, unlocking 100% principal refunds.
+   * **Permissionless Liveness Guarantee (`emergencyResolveExpiredMarket`):** If the market owner or oracle ever goes offline or fails to resolve an expired market, ANY participant can permissionlessly trigger emergency market cancellation after a 3-day grace period, unlocking 100% net deposit refunds.
    * Adheres strictly to Deterministic Safety Invariants (Power of 10 Rules: bounded loops, checked arithmetic).
 
 2. **Autonomous Volatility Agent ([`src/agent_bot.py`](src/agent_bot.py)):**

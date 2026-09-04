@@ -25,10 +25,13 @@ Prediction markets and binary event contracts on high-speed Layer-1 networks fac
 2. **Reentrancy & Settlement Vulnerabilities:** Naive prediction routers lack single-slot mutex locks, exposing pari-mutuel prize pools to cross-contract drain exploits.
 
 ### The Solution
-`somnia-dreamdex-agent` solves this by introducing **Parkinson Realized Volatility Gating**:
-* The agent streams real-time micro-ticks and computes rolling realized volatility.
-* **Chop Filter:** When volatility is below 15 bps, execution is 100% gated (zero capital risked).
-* **Breakout Deployment:** When volatility expands with triple-timeframe momentum alignment ($|\text{trend}| > 0.30$), the agent deploys directional liquidity into DreamDEX binary event contracts.
+`somnia-dreamdex-agent` solves this by introducing two complementary primitives:
+1. **Parkinson Realized Volatility Gating:**
+   * The agent streams real-time micro-ticks and computes rolling realized volatility.
+   * **Chop Filter:** When volatility is below 15 bps, execution is 100% gated (zero capital risked).
+   * **Breakout Deployment:** When volatility expands with triple-timeframe momentum alignment ($|\text{trend}| > 0.30$), the agent deploys directional liquidity into DreamDEX binary event contracts.
+2. **Permissionless Liveness Fallback (`emergencyResolveExpiredMarket`):**
+   * Trustless on-chain timeout fallback allowing ANY participant to cancel an abandoned market after a 3-day grace period, unlocking 100% net deposit refunds.
 
 ---
 
