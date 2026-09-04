@@ -77,7 +77,7 @@ $$\text{TotalPool}_{\text{net}} = \text{Deposit}_{\text{gross}} \times \left(1 -
 git clone https://github.com/Ishant5436/somnia-dreamdex-agent.git
 cd somnia-dreamdex-agent
 
-# 2. Run Comprehensive QA Test Suite (11/11 tests pass in < 0.05s)
+# 2. Run Comprehensive QA Test Suite (17/17 tests pass in < 0.05s)
 python3 -m pytest -v
 
 # 3. Execute Interactive Terminal Demo Walkthrough

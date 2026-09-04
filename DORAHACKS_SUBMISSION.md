@@ -34,17 +34,20 @@ Traditional prediction market bots bleed capital during consolidation chop due t
 
 3. **Interactive Demo Walkthrough ([`scripts/record_demo_walkthrough.py`](scripts/record_demo_walkthrough.py)):**
    * Full end-to-end simulation from tick ingestion to onchain transaction confirmation and oracle payout disbursement.
+   * Visual terminal walkthrough demo: [`assets/somnia_agent_demo.gif`](https://raw.githubusercontent.com/Ishant5436/somnia-dreamdex-agent/main/assets/somnia_agent_demo.gif)
+   * High-definition video walkthrough: [`assets/somnia_agent_demo.mp4`](https://github.com/Ishant5436/somnia-dreamdex-agent/raw/main/assets/somnia_agent_demo.mp4)
 
 ---
 
 ## 3. Quick Verification & Demo Commands
 
 ```bash
-# 1. Clone & Run Automated Test Suite (100% Passing in <0.05s)
+# 1. Clone & Run Automated Test Suite (17/17 Passing in <0.05s)
 git clone https://github.com/Ishant5436/somnia-dreamdex-agent.git
 cd somnia-dreamdex-agent
-pytest -v
+python3 -m pytest -v
 
 # 2. Run Interactive Demo Execution Walkthrough
 python3 scripts/record_demo_walkthrough.py
 ```
+
