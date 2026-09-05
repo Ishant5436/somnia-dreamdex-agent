@@ -2,7 +2,7 @@
 
 An ultra-high-throughput, non-custodial AI Agent and smart contract routing protocol engineered natively for **Somnia Layer-1** (Shannon Testnet) and **DreamDEX Event Contracts**.
 
-[![Tests](https://img.shields.io/badge/Tests-17%2F17%20Passed-brightgreen)](tests/)
+[![Tests](https://img.shields.io/badge/Tests-19%2F19%20Passed-brightgreen)](tests/)
 [![CI](https://github.com/Ishant5436/somnia-dreamdex-agent/actions/workflows/ci.yml/badge.svg)](https://github.com/Ishant5436/somnia-dreamdex-agent/actions)
 [![Network](https://img.shields.io/badge/Network-Somnia%20Shannon%20(50312)-blue)](https://somnia.network)
 [![Contract](https://img.shields.io/badge/Contract-0xc021...F36D-green)](https://shannon-explorer.somnia.network/address/0xc0219209598d4d3A86ff0CcCcC531d623b51F36D)
@@ -30,8 +30,9 @@ Prediction markets and binary event contracts on high-speed Layer-1 networks fac
    * The agent streams real-time micro-ticks and computes rolling realized volatility.
    * **Chop Filter:** When volatility is below 15 bps, execution is 100% gated (zero capital risked).
    * **Breakout Deployment:** When volatility expands with triple-timeframe momentum alignment ($|\text{trend}| > 0.30$), the agent deploys directional liquidity into DreamDEX binary event contracts.
-2. **Permissionless Liveness Fallback (`emergencyResolveExpiredMarket`):**
+2. **Permissionless Liveness Fallback & Empty Pool Protection:**
    * Trustless on-chain timeout fallback allowing ANY participant to cancel an abandoned market after a 3-day grace period, unlocking 100% net deposit refunds.
+   * Automated fallback to cancellation if a declared winning outcome has zero deposits, preventing fund lockup.
 
 ---
 
@@ -80,10 +81,13 @@ $$\text{TotalPool}_{\text{net}} = \text{Deposit}_{\text{gross}} \times \left(1 -
 git clone https://github.com/Ishant5436/somnia-dreamdex-agent.git
 cd somnia-dreamdex-agent
 
-# 2. Run Comprehensive QA Test Suite (17/17 tests pass in < 0.05s)
+# 2. Install Dependencies
+pip install -r requirements.txt
+
+# 3. Run Comprehensive QA Test Suite (19/19 tests pass)
 python3 -m pytest -v
 
-# 3. Execute Interactive Terminal Demo Walkthrough
+# 4. Execute Interactive Terminal Demo Walkthrough
 python3 scripts/record_demo_walkthrough.py
 ```
 

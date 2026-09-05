@@ -128,8 +128,13 @@ def test_whitebox_router_payout_proportional_math():
 PROJECT_ROOT = os.path.normpath(os.path.join(os.path.dirname(__file__), ".."))
 ROUTER_SRC = "contracts/DreamDEXRouter.sol"
 ATTACKER_SRC = "contracts/test/ReentrancyAttacker.sol"
+try:
+    import web3
+    _WEB3_AVAILABLE = True
+except ImportError:
+    _WEB3_AVAILABLE = False
 
-_TOOLING_AVAILABLE = shutil.which("solc") and shutil.which("anvil")
+_TOOLING_AVAILABLE = shutil.which("solc") and shutil.which("anvil") and _WEB3_AVAILABLE
 
 
 def _free_port() -> int:
@@ -152,7 +157,7 @@ def _compile_contracts() -> dict:
 @pytest.fixture()
 def anvil_chain():
     if not _TOOLING_AVAILABLE:
-        pytest.skip("solc and/or anvil not available on PATH")
+        pytest.skip("solc, anvil, and/or web3 not available on environment")
 
     port = _free_port()
     proc = subprocess.Popen(
@@ -341,4 +346,57 @@ def test_whitebox_emergency_resolve_expired_market_liveness(anvil_chain):
     # Net shares deposited: 1 ETH - 20 BPS = 0.998 ETH
     expected_refund = deposit_wei - ((deposit_wei * 20) // 10000)
     assert net_refund == expected_refund, f"Expected {expected_refund}, got {net_refund}"
+
+
+def test_whitebox_empty_pool_resolution_auto_refund(anvil_chain):
+    """
+    White-box test verifying resolution of a market where the winning side has 0 deposits:
+    Contract must automatically convert outcome to CANCELLED (3) so losing side deposits
+    are not permanently locked and users can claim 100% principal refunds.
+    """
+    w3 = anvil_chain
+    owner, short_user = w3.eth.accounts[0], w3.eth.accounts[1]
+
+    contracts = _compile_contracts()
+    router = _deploy(w3, contracts, f"{ROUTER_SRC}:DreamDEXRouter", owner)
+
+    # 1. Create a market
+    tx_hash = router.functions.createMarket("BTC Moon or Bust", 3600).transact({"from": owner})
+    receipt = w3.eth.wait_for_transaction_receipt(tx_hash)
+    market_id = router.events.MarketCreated().process_receipt(receipt)[0]["args"]["marketId"]
+
+    # 2. Only SHORT depositor deposits 1 ETH; LONG side remains at 0 ETH
+    deposit_wei = w3.to_wei(1, "ether")
+    tx_hash = router.functions.buyOutcomeShares(market_id, False).transact({
+        "from": short_user,
+        "value": deposit_wei
+    })
+    assert w3.eth.wait_for_transaction_receipt(tx_hash).status == 1
+
+    # Verify totalLongPool == 0 and totalShortPool > 0
+    m_info = router.functions.markets(market_id).call()
+    assert m_info[4] == 0  # totalLongPool == 0
+    assert m_info[5] > 0   # totalShortPool > 0
+
+    # 3. Owner attempts to resolve to LONG_WINS (outcome 1)
+    # The router must detect totalLongPool == 0 and automatically degrade to outcome 3 (CANCELLED)
+    tx_hash = router.functions.resolveMarket(market_id, 1).transact({"from": owner})
+    assert w3.eth.wait_for_transaction_receipt(tx_hash).status == 1
+
+    m_info_resolved = router.functions.markets(market_id).call()
+    assert m_info_resolved[6] is True  # isResolved == True
+    assert m_info_resolved[7] == 3     # winningOutcome converted to 3 (CANCELLED)
+
+    # 4. Short depositor calls claimPayout and successfully reclaims 100% net principal
+    bal_before = w3.eth.get_balance(short_user)
+    tx_hash = router.functions.claimPayout(market_id).transact({"from": short_user})
+    receipt = w3.eth.wait_for_transaction_receipt(tx_hash)
+    assert receipt.status == 1
+
+    bal_after = w3.eth.get_balance(short_user)
+    gas_used = receipt.gasUsed * receipt.effectiveGasPrice
+    net_refund = bal_after - bal_before + gas_used
+    expected_refund = deposit_wei - ((deposit_wei * 20) // 10000)
+    assert net_refund == expected_refund, "Depositor did not receive full principal refund on empty pool resolution"
+
 

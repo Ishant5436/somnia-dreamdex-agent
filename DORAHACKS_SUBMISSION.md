@@ -44,9 +44,10 @@ Built to solve the dual failure modes of high-frequency prediction markets — c
 ## 3. Quick Verification & Demo Commands
 
 ```bash
-# 1. Clone & Run Automated Test Suite (17/17 Passing in <0.05s)
+# 1. Clone & Run Automated Test Suite (19/19 Passing)
 git clone https://github.com/Ishant5436/somnia-dreamdex-agent.git
 cd somnia-dreamdex-agent
+pip install -r requirements.txt
 python3 -m pytest -v
 
 # 2. Run Interactive Demo Execution Walkthrough

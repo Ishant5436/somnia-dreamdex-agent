@@ -134,10 +134,19 @@ contract DreamDEXRouter {
         require(!market.isResolved, "ALREADY_RESOLVED");
         require(outcome == 1 || outcome == 2 || outcome == 3, "INVALID_OUTCOME");
 
-        market.isResolved = true;
-        market.winningOutcome = outcome;
+        // Guard against permanently trapping funds if winning pool has 0 deposits:
+        // Automatically fall back to CANCELLED (3) to guarantee 100% principal refunds.
+        uint8 effectiveOutcome = outcome;
+        if (outcome == 1 && market.totalLongPool == 0) {
+            effectiveOutcome = 3;
+        } else if (outcome == 2 && market.totalShortPool == 0) {
+            effectiveOutcome = 3;
+        }
 
-        emit MarketResolved(marketId, outcome, block.timestamp);
+        market.isResolved = true;
+        market.winningOutcome = effectiveOutcome;
+
+        emit MarketResolved(marketId, effectiveOutcome, block.timestamp);
     }
 
     /**
@@ -175,12 +184,22 @@ contract DreamDEXRouter {
 
         if (market.winningOutcome == 1) {
             // LONG WINS
-            require(pos.longShares > 0, "NO_WINNING_SHARES");
-            payout = (pos.longShares * totalPool) / market.totalLongPool;
+            if (market.totalLongPool == 0) {
+                // Defense-in-depth: refund principal if winning pool was empty
+                payout = pos.longShares + pos.shortShares;
+            } else {
+                require(pos.longShares > 0, "NO_WINNING_SHARES");
+                payout = (pos.longShares * totalPool) / market.totalLongPool;
+            }
         } else if (market.winningOutcome == 2) {
             // SHORT WINS
-            require(pos.shortShares > 0, "NO_WINNING_SHARES");
-            payout = (pos.shortShares * totalPool) / market.totalShortPool;
+            if (market.totalShortPool == 0) {
+                // Defense-in-depth: refund principal if winning pool was empty
+                payout = pos.longShares + pos.shortShares;
+            } else {
+                require(pos.shortShares > 0, "NO_WINNING_SHARES");
+                payout = (pos.shortShares * totalPool) / market.totalShortPool;
+            }
         } else {
             // CANCELLED: Refund original principal
             payout = pos.longShares + pos.shortShares;

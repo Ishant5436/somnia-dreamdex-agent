@@ -20,6 +20,7 @@ class ParkinsonVolatility:
         self.window_size = window_size
         self._hl_squared_logs: deque[float] = deque(maxlen=window_size)
         self._sum_hl_sq: float = 0.0
+        self._update_counter: int = 0
 
     def update(self, high: float, low: float) -> float:
         assert high >= low > 0.0, "High must be >= Low > 0.0"
@@ -33,11 +34,21 @@ class ParkinsonVolatility:
 
         self._hl_squared_logs.append(hl_sq)
         self._sum_hl_sq += hl_sq
+
+        # Guard against IEEE-754 catastrophic cancellation drift across sliding rotations
+        if self._sum_hl_sq < 0.0:
+            self._sum_hl_sq = 0.0
+
+        # Periodic exact recomputation eliminates accumulated floating-point error
+        self._update_counter += 1
+        if self._update_counter % self.window_size == 0:
+            self._sum_hl_sq = max(0.0, math.fsum(self._hl_squared_logs))
+
         assert self._sum_hl_sq >= 0.0
 
         n = len(self._hl_squared_logs)
         variance = (self.PARKINSON_CONSTANT * self._sum_hl_sq) / max(n, 1)
-        return math.sqrt(variance)
+        return math.sqrt(max(0.0, variance))
 
     def volatility_bps(self, high: float, low: float) -> float:
         """Returns volatility in basis points (1 bps = 0.01%)."""

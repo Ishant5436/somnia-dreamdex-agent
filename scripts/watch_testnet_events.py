@@ -47,6 +47,42 @@ def rpc_call(method: str, params: list = None, timeout: float = 3.0) -> dict:
         return {"error": str(e), "latency_ms": 0.0}
 
 
+def fetch_live_market_data() -> dict:
+    """
+    Fetches real-time BTC/USDT 24h market high/low prices from public exchange API.
+    Gracefully falls back to offline benchmark prices if network is unavailable.
+    """
+    url = "https://api.binance.com/api/v3/ticker/24hr?symbol=BTCUSDT"
+    req = urllib.request.Request(url, headers={"User-Agent": "DreamDEX-Telemetry/1.0"})
+    try:
+        with urllib.request.urlopen(req, timeout=3.0) as resp:
+            data = json.loads(resp.read().decode("utf-8"))
+            high = float(data.get("highPrice", 0.0))
+            low = float(data.get("lowPrice", 0.0))
+            last = float(data.get("lastPrice", 0.0))
+            open_p = float(data.get("openPrice", 0.0))
+            if high > low > 0.0:
+                trend = (last - open_p) / open_p if open_p > 0 else 0.0
+                return {
+                    "high": high,
+                    "low": low,
+                    "last": last,
+                    "trend_signal": max(-1.0, min(1.0, trend * 10.0)),
+                    "price_source": "BINANCE_SPOT_LIVE"
+                }
+    except Exception:
+        pass
+
+    # Deterministic offline benchmark fallback
+    return {
+        "high": 81423.0,
+        "low": 78660.0,
+        "last": 79600.0,
+        "trend_signal": 0.45,
+        "price_source": "OFFLINE_BENCHMARK_FALLBACK"
+    }
+
+
 def probe_somnia_testnet() -> dict:
     """Probes Somnia Shannon Testnet block height, chain ID, and contract state."""
     block_res = rpc_call("eth_blockNumber")
@@ -59,12 +95,13 @@ def probe_somnia_testnet() -> dict:
     agent = DreamDEXAgent(agent_address=CONTRACT_ADDRESS, rpc_url=RPC_URL)
     pv = ParkinsonVolatility(window_size=15)
     
-    # Simulate current BTC/USD high-low volatility
-    vol_bps = pv.volatility_bps(high=78450.0, low=77900.0)
+    # Ingest market data from live feed or verified fallback
+    market_data = fetch_live_market_data()
+    vol_bps = pv.volatility_bps(high=market_data["high"], low=market_data["low"])
     decision = agent.evaluate_event_contract(
-        market_title="BTC Breakout > $78,000",
+        market_title=f"BTC Breakout > ${int(market_data['last']):,}",
         current_vol_bps=vol_bps,
-        trend_signal=0.55
+        trend_signal=market_data["trend_signal"]
     )
 
     telemetry = {
@@ -74,6 +111,7 @@ def probe_somnia_testnet() -> dict:
         "block_height": block_num,
         "contract_verified": has_code,
         "rpc_latency_ms": block_res.get("latency_ms", 0.0),
+        "market_price_data": market_data,
         "realized_volatility_bps": round(vol_bps, 2),
         "active_decision": decision,
         "timestamp": int(time.time()),
@@ -83,6 +121,17 @@ def probe_somnia_testnet() -> dict:
 
 
 if __name__ == "__main__":
-    print("[SOMNIA] Probing Shannon Layer-1 Testnet...")
-    telemetry = probe_somnia_testnet()
-    print(json.dumps(telemetry, indent=2))
+    is_daemon = "--daemon" in sys.argv or "--loop" in sys.argv
+    poll_interval = 5.0
+
+    print(f"[SOMNIA] Probing Shannon Layer-1 Testnet (mode: {'DAEMON' if is_daemon else 'SINGLE-SHOT'})...")
+    
+    try:
+        while True:
+            telemetry = probe_somnia_testnet()
+            print(json.dumps(telemetry, indent=2))
+            if not is_daemon:
+                break
+            time.sleep(poll_interval)
+    except KeyboardInterrupt:
+        print("\n[SOMNIA] Telemetry daemon terminated gracefully.")

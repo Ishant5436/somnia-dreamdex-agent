@@ -48,3 +48,18 @@ def test_monotonic_deque_sliding_minimum():
     assert sme.push(8.0) == 5.0    # Window: [5, 12, 8] -> min = 5
     assert sme.push(9.0) == 8.0    # Window: [12, 8, 9] (5 expired) -> min = 8.0
     assert sme.push(3.0) == 3.0    # Window: [8, 9, 3] -> min = 3.0
+
+
+def test_parkinson_volatility_floating_point_drift_resilience():
+    """Verify that 10,000 continuous sliding updates do not trigger floating-point drift or assert failure."""
+    pv = ParkinsonVolatility(window_size=20)
+    for i in range(10000):
+        # Alternate between tight and wide spreads to test repeated addition/subtraction
+        spread = 1.0 + (0.01 * (i % 7))
+        low = 100.0 + (i % 13)
+        high = low * spread
+        vol = pv.update(high, low)
+        assert not math.isnan(vol)
+        assert vol >= 0.0
+        assert pv._sum_hl_sq >= 0.0
+
