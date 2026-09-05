@@ -101,5 +101,5 @@ tests/test_whitebox.py::test_whitebox_reentrancy_attack_blocked_by_guard PASSED 
 tests/test_whitebox.py::test_whitebox_emergency_resolve_expired_market_liveness PASSED [ 94%]
 tests/test_whitebox.py::test_whitebox_empty_pool_resolution_auto_refund PASSED [100%]
 
-======================== 19 passed, 1 warning in 5.53s =========================
+============================== 19 passed in 5.31s ==============================
 ```
