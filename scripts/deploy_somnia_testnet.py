@@ -1,63 +1,60 @@
 #!/usr/bin/env python3
 """
-Somnia Shannon Testnet (Chain ID 50312) Deployment & Verification Script
-Simulates and executes deployment of DreamDEXRouter.sol to Somnia Layer-1.
+Somnia Shannon Testnet (Chain ID 50312) Deployment Verification Script
+
+DreamDEXRouter is already deployed to Shannon. This script reads and displays
+the real, committed deployment receipt rather than generating a new one - a
+prior version of this file fabricated a sha256-derived "simulated_contract_address"
+locally with zero blockchain interaction, and `make deploy` would silently
+overwrite the real receipt with that fake data on every run. See
+contracts/SECURITY_AUDIT.md for the history.
+
+To deploy a new instance for real, use forge directly:
+    forge create contracts/DreamDEXRouter.sol:DreamDEXRouter \
+        --rpc-url https://dream-rpc.somnia.network \
+        --private-key <YOUR_KEY> --broadcast
+then update contracts/deployment_receipt.json with the real receipt.
 """
 
-import os
 import json
-import hashlib
-import datetime
+import os
+import sys
 
-SOMNIA_RPC_URL = "https://dream-rpc.somnia.network"
-SOMNIA_CHAIN_ID = 50312
 EXPLORER_URL = "https://shannon-explorer.somnia.network"
+
 
 def main():
     print("=" * 70)
-    print("  SOMNIA SHANNON TESTNET CONTRACT DEPLOYMENT ENGINE (Chain ID 50312)")
+    print("  SOMNIA SHANNON TESTNET DEPLOYMENT VERIFICATION (Chain ID 50312)")
     print("=" * 70)
-    print(f"• Target RPC: {SOMNIA_RPC_URL}")
-    print(f"• Target Explorer: {EXPLORER_URL}")
-    print("• Contract: contracts/DreamDEXRouter.sol (Solidity ^0.8.20)\n")
 
-    BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    contract_path = os.path.join(BASE_DIR, "contracts", "DreamDEXRouter.sol")
-    with open(contract_path, "r") as f:
-        contract_src = f.read()
+    base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    receipt_path = os.path.join(base_dir, "contracts", "deployment_receipt.json")
 
-    src_hash = hashlib.sha256(contract_src.encode("utf-8")).hexdigest()
-    deployer_address = "0x742d35Cc6634C0532925a3b844Bc454e4438f44e"
-    simulated_contract_address = "0x" + hashlib.sha256((deployer_address + "50312").encode("utf-8")).hexdigest()[:40]
+    if not os.path.exists(receipt_path):
+        print(f"\n[ERROR] No deployment receipt found at: {receipt_path}")
+        print("This contract has not been deployed yet, or the receipt was removed.")
+        print("Deploy for real with forge, then write the resulting receipt by hand:")
+        print("  forge create contracts/DreamDEXRouter.sol:DreamDEXRouter \\")
+        print("      --rpc-url https://dream-rpc.somnia.network \\")
+        print("      --private-key <YOUR_KEY> --broadcast")
+        sys.exit(1)
 
-    receipt = {
-        "network": "Somnia Shannon Layer-1 Testnet",
-        "chain_id": SOMNIA_CHAIN_ID,
-        "contract_name": "DreamDEXRouter",
-        "contract_address": simulated_contract_address,
-        "deployer_address": deployer_address,
-        "source_code_sha256": src_hash,
-        "solidity_version": "^0.8.20",
-        "optimization": True,
-        "runs": 200,
-        "invariants": {
-            "reentrancy_guard": "Single-Slot Mutex Lock (slot _status)",
-            "fee_accounting": "Segregated totalProtocolFees accumulator (20 BPS)",
-            "oracle_settlement": "Atomic owner/oracle binary state resolution",
-            "payout_math": "Proportional pari-mutuel payout distribution"
-        },
-        "verified_explorer_url": f"{EXPLORER_URL}/address/{simulated_contract_address}",
-        "timestamp": datetime.datetime.now().isoformat()
-    }
+    with open(receipt_path, "r") as f:
+        receipt = json.load(f)
 
-    receipt_path = os.path.join(BASE_DIR, "contracts", "deployment_receipt.json")
-    with open(receipt_path, "w") as f:
-        json.dump(receipt, f, indent=2)
+    address = receipt.get("contract_address", "UNKNOWN")
+    tx_hash = receipt.get("transaction_hash", "UNKNOWN")
 
-    print(f"[SUCCESS]  Contract Verified: {receipt['contract_name']}")
-    print(f"[SUCCESS]  Contract Address:  {receipt['contract_address']}")
-    print(f"[SUCCESS]  Explorer URL:      {receipt['verified_explorer_url']}")
-    print(f"[SUCCESS]  Deployment receipt saved to: {receipt_path}\n")
+    print(f"\nContract:          {receipt.get('contract_name', 'DreamDEXRouter')}")
+    print(f"Network:            {receipt.get('network', 'Somnia Shannon Layer-1 Testnet')}")
+    print(f"Deployed Address:   {address}")
+    print(f"Deployer:           {receipt.get('deployer_address', 'UNKNOWN')}")
+    print(f"Creation Tx:        {tx_hash}")
+    print(f"Explorer (address): {receipt.get('verified_explorer_url', f'{EXPLORER_URL}/address/{address}')}")
+    print(f"Explorer (tx):      {receipt.get('transaction_explorer_url', f'{EXPLORER_URL}/tx/{tx_hash}')}")
+    print(f"\n[OK] This is a real, previously-broadcast deployment - not a simulation.")
+
 
 if __name__ == "__main__":
     main()
