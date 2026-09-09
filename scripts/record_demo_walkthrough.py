@@ -7,7 +7,6 @@ Demonstrates:
 3. Non-Reentrant Event Settlement on Somnia EVM
 """
 
-import sys
 import time
 
 GREEN = "\033[92m"
@@ -33,11 +32,11 @@ def main():
     time.sleep(0.3)
 
     print_step("1. INITIALIZING SOMNIA L1 RPC & CONTRACT ROUTER")
-    print(f"  • Network: Somnia Shannon Testnet (Chain ID: 50312)")
-    print(f"  • RPC Endpoint: https://dream-rpc.somnia.network")
-    print(f"  • Router Contract: 0xc0219209598d4d3A86ff0CcCcC531d623b51F36D (Verified)")
+    print("  • Network: Somnia Shannon Testnet (Chain ID: 50312)")
+    print("  • RPC Endpoint: https://dream-rpc.somnia.network")
+    print("  • Router Contract: 0xc0219209598d4d3A86ff0CcCcC531d623b51F36D (Verified)")
     print(f"  • Non-Reentrancy Guard: {GREEN}ACTIVE (Mutex 1-Slot Locked){RESET}")
-    print(f"  • Deployer Address: 0x31305a21497df91A9D8a60a2FF62519973Ab8323")
+    print("  • Deployer Address: 0x31305a21497df91A9D8a60a2FF62519973Ab8323")
     time.sleep(0.3)
 
     print_step("2. STREAMING TICK DATA & EVALUATING VOLATILITY GATING")
@@ -63,22 +62,22 @@ def main():
         time.sleep(0.2)
 
     print_step("3. EXECUTING AUTONOMOUS EVENT CONTRACT ORDER")
-    print(f"  • Target Event: \"Will BTC exceed $78,250 by 20:00 UTC?\" (Market ID #104)")
+    print("  • Target Event: \"Will BTC exceed $78,250 by 20:00 UTC?\" (Market ID #104)")
     print(f"  • Selected Side: {GREEN}YES / LONG (Confidence: 87.4%){RESET}")
-    print(f"  • Capital Allocated: 25.00 STT ($25.00 USD equivalent)")
-    print(f"  • Submitting transaction to Somnia DreamDEX Router...")
+    print("  • Capital Allocated: 25.00 STT ($25.00 USD equivalent)")
+    print("  • Submitting transaction to Somnia DreamDEX Router...")
     time.sleep(0.3)
     print(f"  • {GREEN}Transaction Confirmed on Somnia L1!{RESET}")
-    print(f"    Tx Hash: 0x9f4a8b27c13e5d08129486c3a1e94819204857b28a9d18273645b8172635a918")
-    print(f"    Gas Used: 48,219 | Block: #1,849,204 | Latency: 320ms")
+    print("    Tx Hash: 0x9f4a8b27c13e5d08129486c3a1e94819204857b28a9d18273645b8172635a918")
+    print("    Gas Used: 48,219 | Block: #1,849,204 | Latency: 320ms")
 
     print_step("4. ORACLE RESOLUTION & ATOMIC PAYOUT CLAIM")
-    print(f"  • Market Closed at 20:00 UTC with Final Settlement Price: $78,285.00")
+    print("  • Market Closed at 20:00 UTC with Final Settlement Price: $78,285.00")
     print(f"  • Oracle Verification: {GREEN}OUTCOME_YES CONFIRMED{RESET}")
-    print(f"  • Calling router `claimPayout(marketId=104)`...")
+    print("  • Calling router `claimPayout(marketId=104)`...")
     time.sleep(0.3)
     print(f"  • Payout Disbursed: {GREEN}+49.40 STT (+97.6% Realized ROI){RESET}")
-    print(f"  • Protocol Routing Fee (0.20% / 20 BPS): 0.05 STT")
+    print("  • Protocol Routing Fee (0.20% / 20 BPS): 0.05 STT")
     print(f"  • Final Realized PnL: {GREEN}+$24.40 USD (Clean Settlement){RESET}")
 
     print(f"\n{BOLD}{GREEN}======================================================================{RESET}")

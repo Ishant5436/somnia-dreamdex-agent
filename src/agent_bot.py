@@ -5,7 +5,6 @@ Monitors live volatility breakout triggers, calculates implied event odds,
 and executes non-custodial prediction trades on Somnia Devnet.
 """
 
-import sys
 import json
 import time
 import math

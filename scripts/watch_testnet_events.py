@@ -14,7 +14,7 @@ import urllib.error
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from src.agent_bot import DreamDEXAgent
-from src.indicators import ParkinsonVolatility, SlidingMonotonicExtremum
+from src.indicators import ParkinsonVolatility
 
 RPC_URL = "https://dream-rpc.somnia.network"
 CONTRACT_ADDRESS = "0xc0219209598d4d3A86ff0CcCcC531d623b51F36D"

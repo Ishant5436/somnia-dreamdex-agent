@@ -15,7 +15,7 @@ deploy:
 	python3 scripts/deploy_somnia_testnet.py
 
 lint:
-	python3 -m flake8 src/ tests/ --count --max-line-length=120 --statistics || true
+	/Users/ishantpanchal/.local/bin/ruff check src/ tests/ scripts/
 
 clean:
 	rm -rf __pycache__ .pytest_cache

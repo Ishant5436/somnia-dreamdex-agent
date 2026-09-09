@@ -7,7 +7,6 @@ and external response format verification.
 import subprocess
 import os
 import sys
-import pytest
 
 SOMNIA_ROOT = os.path.normpath(os.path.join(os.path.dirname(__file__), ".."))
 DEMO_SCRIPT = os.path.join(SOMNIA_ROOT, "scripts", "record_demo_walkthrough.py")

@@ -12,6 +12,7 @@ import shutil
 import socket
 import subprocess
 import time
+import importlib.util
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 from agent_bot import DreamDEXAgent
@@ -128,11 +129,7 @@ def test_whitebox_router_payout_proportional_math():
 PROJECT_ROOT = os.path.normpath(os.path.join(os.path.dirname(__file__), ".."))
 ROUTER_SRC = "contracts/DreamDEXRouter.sol"
 ATTACKER_SRC = "contracts/test/ReentrancyAttacker.sol"
-try:
-    import web3
-    _WEB3_AVAILABLE = True
-except ImportError:
-    _WEB3_AVAILABLE = False
+_WEB3_AVAILABLE = importlib.util.find_spec("web3") is not None
 
 _TOOLING_AVAILABLE = shutil.which("solc") and shutil.which("anvil") and _WEB3_AVAILABLE
 

@@ -53,7 +53,7 @@ def main():
     print(f"Creation Tx:        {tx_hash}")
     print(f"Explorer (address): {receipt.get('verified_explorer_url', f'{EXPLORER_URL}/address/{address}')}")
     print(f"Explorer (tx):      {receipt.get('transaction_explorer_url', f'{EXPLORER_URL}/tx/{tx_hash}')}")
-    print(f"\n[OK] This is a real, previously-broadcast deployment - not a simulation.")
+    print("\n[OK] This is a real, previously-broadcast deployment - not a simulation.")
 
 
 if __name__ == "__main__":
