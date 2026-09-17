@@ -12,5 +12,6 @@ keystore.json
 # Foundry build artifacts
 out/
 cache/
+target/
 
 
