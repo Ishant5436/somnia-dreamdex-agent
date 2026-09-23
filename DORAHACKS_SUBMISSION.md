@@ -1,4 +1,4 @@
-# Somnia × DreamDEX Autonomous Agent — DoraHacks Submission Package
+# Somnia x DreamDEX Autonomous Agent -- DoraHacks Submission Package
 
 **Hackathon:** Event Contracts Hackathon (Somnia Network & DreamDEX)  
 **Prize Pool:** $5,000 USD  
@@ -7,15 +7,15 @@
 **Smart Contract:** [`contracts/DreamDEXRouter.sol`](https://github.com/Ishant5436/somnia-dreamdex-agent/blob/main/contracts/DreamDEXRouter.sol)  
 **Verified On-Chain Contract:** [`0xc0219209598d4d3A86ff0CcCcC531d623b51F36D`](https://shannon-explorer.somnia.network/address/0xc0219209598d4d3A86ff0CcCcC531d623b51F36D)  
 **Creation Tx Hash:** [`0x79df1813e2ce54afa4c014ac4c7e2cc358a89a0a789c5adb4b1700593182e657`](https://shannon-explorer.somnia.network/tx/0x79df1813e2ce54afa4c014ac4c7e2cc358a89a0a789c5adb4b1700593182e657)  
-**Deployer Address:** `0x31305a21497df91A9D8a60a2FF62519973Ab8323` (Somnia Shannon Testnet — Chain ID 50312)  
+**Deployer Address:** `0x31305a21497df91A9D8a60a2FF62519973Ab8323` (Somnia Shannon Testnet -- Chain ID 50312)  
 
 ---
 
 ## 1. Executive Summary
 
-**Somnia-DreamDEX-Agent** is an ultra-high-throughput autonomous prediction market agent and EVM event settlement router engineered natively for the **Somnia Shannon Layer-1 Testnet**.
+**Somnia-DreamDEX-Agent** is an autonomous prediction market bot and EVM event settlement router for the **Somnia Shannon Layer-1 Testnet**.
 
-Built to solve the dual failure modes of high-frequency prediction markets — capital bleed in chop and abandoned market freezes — our protocol delivers three core innovations:
+Built to solve the dual failure modes of high-frequency prediction markets -- capital bleed in chop and abandoned market freezes -- our protocol delivers three core innovations:
 1. **Parkinson Realized Volatility Gating:** Locks agent execution during consolidation chop (<15 bps) to eliminate spread slippage, deploying capital into DreamDEX binary event contracts only upon regime expansion.
 2. **Permissionless Liveness Fallback (`emergencyResolveExpiredMarket`):** A trustless on-chain escape hatch that allows ANY participant to cancel an abandoned market and claim a 100% net deposit refund if the market creator or oracle fails to resolve within a 3-day grace period.
 3. **Empty-Pool Auto-Refund Protection:** Guarantees that if a market resolves to an outcome with zero opposing deposits, all participants receive an automatic 100% principal refund rather than suffering permanent fund lockups.
@@ -28,7 +28,7 @@ Built to solve the dual failure modes of high-frequency prediction markets — c
    * Single-slot mutex locks preventing cross-contract and same-contract reentrancy.
    * Atomic outcome minting (`YES` / `NO` shares), oracle settlement, and proportional payout distribution.
    * **Permissionless Liveness Guarantee:** If the market owner or oracle ever goes offline or fails to resolve an expired market, `emergencyResolveExpiredMarket` unlocks 100% net deposit refunds.
-   * Adheres strictly to Deterministic Safety Invariants (Power of 10 Rules: bounded loops, checked arithmetic).
+   * Enforces bounded loops and checked arithmetic across all router calls.
 
 2. **Autonomous Volatility Agent ([`src/agent_bot.py`](https://github.com/Ishant5436/somnia-dreamdex-agent/blob/main/src/agent_bot.py)):**
    * Real-time tick ingestion and rolling realized volatility calculation via Parkinson estimator.
@@ -42,9 +42,9 @@ Built to solve the dual failure modes of high-frequency prediction markets — c
 
 ---
 
-## 3. Power of 10 Deterministic Safety Invariants Audit
+## 3. Code Constraints & Safety Checks
 
-The implementation strictly satisfies the Power of 10 Safety Invariants:
+The implementation enforces strict software constraints:
 
 | Invariant | Standard Enforced | Implementation Evidence |
 | :--- | :--- | :--- |
