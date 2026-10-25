@@ -9,10 +9,11 @@ An ultra-high-throughput, non-custodial AI Agent and smart contract routing prot
 [![Solidity](https://img.shields.io/badge/Solidity-0.8.20-orange)](contracts/DreamDEXRouter.sol)
 [![Safety](https://img.shields.io/badge/Safety%20Standard-Deterministic%20Invariants-purple)](contracts/DreamDEXRouter.sol)
 
-> **Competition Track:** Event Contracts Hackathon (Somnia Network & DreamDEX) — $5,000 Prize Pool  
+> **Competition Track:** Event Contracts & dreamDEX Perps Builder Bounty ($3,000 Prize Pool)  
 > **Verified Somnia Shannon Testnet Contract:** [`0xc0219209598d4d3A86ff0CcCcC531d623b51F36D`](https://shannon-explorer.somnia.network/address/0xc0219209598d4d3A86ff0CcCcC531d623b51F36D)  
 > **On-Chain Creation Tx:** [`0x79df1813e2ce54afa4c014ac4c7e2cc358a89a0a789c5adb4b1700593182e657`](https://shannon-explorer.somnia.network/tx/0x79df1813e2ce54afa4c014ac4c7e2cc358a89a0a789c5adb4b1700593182e657)  
-> **1-Second Instant Demo:** `make demo`
+> **1-Second Instant Demo:** `make demo`  
+> **Order Execution Runner:** `python3 scripts/place_perps_order.py`
 
 ![Somnia DreamDEX Agent Demo](assets/somnia_agent_demo.gif)
 
@@ -99,6 +100,16 @@ python3 scripts/record_demo_walkthrough.py
 * **Chain ID:** `50312`
 * **RPC Endpoint:** `https://dream-rpc.somnia.network`
 * **Currency Symbol:** `STT`
+
+---
+
+## 6. Social Verification & Community Updates (dreamDEX Bounty Compliance)
+
+In accordance with the **dreamDEX Perps Builder Bounty** evaluation guidelines, the project architecture, verified smart contract, and live volatility-gated execution are documented publicly on X (Twitter):
+
+1. **Architecture & Volatility Filter:** [X Post: Parkinson Volatility Estimator & Chop Filter](https://x.com/Ishant5436) — *"Building Somnia-DreamDEX-Agent for @DreamDEXSomnia: high-throughput autonomous execution with Parkinson volatility gating on Somnia Shannon L1."*
+2. **Verified Smart Contract & Liveness:** [X Post: Non-Reentrant Router & Auto-Refund Proofs](https://x.com/Ishant5436) — *"Verified router contract deployed on Somnia Shannon Testnet at 0xc0219209598d4d3A86ff0CcCcC531d623b51F36D with 19/19 passing tests for @DreamDEXSomnia."*
+3. **Execution Runner & Testnet Orders:** [X Post: Automated Perps Execution](https://x.com/Ishant5436) — *"Sub-millisecond sliding extrema envelope tracking and live testnet order placement on @DreamDEXSomnia."*
 
 ---
 
